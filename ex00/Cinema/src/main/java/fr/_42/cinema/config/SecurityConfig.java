@@ -1,5 +1,6 @@
 package fr._42.cinema.config;
 
+import fr._42.cinema.repositories.AuthenticationLogRepository;
 import fr._42.cinema.security.CinemaUserDetailsService;
 import fr._42.cinema.security.RoleBasedAuthenticationSuccessHandler;
 import org.springframework.context.annotation.Bean;
@@ -22,12 +23,12 @@ public class SecurityConfig {
     }
 
     @Bean
-    public AuthenticationSuccessHandler authenticationSuccessHandler() {
-        return new RoleBasedAuthenticationSuccessHandler();
+    public AuthenticationSuccessHandler authenticationSuccessHandler(AuthenticationLogRepository authenticationLogRepository) {
+        return new RoleBasedAuthenticationSuccessHandler(authenticationLogRepository);
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http, CinemaUserDetailsService userDetailsService)
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, CinemaUserDetailsService userDetailsService, AuthenticationLogRepository authenticationLogRepository)
             throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
@@ -43,7 +44,7 @@ public class SecurityConfig {
                         .loginPage("/signIn")
                         .usernameParameter("email")
                         .passwordParameter("password")
-                        .successHandler(authenticationSuccessHandler())
+                        .successHandler(authenticationSuccessHandler(authenticationLogRepository))
                         .permitAll()
                 )
                 .rememberMe(remember -> remember

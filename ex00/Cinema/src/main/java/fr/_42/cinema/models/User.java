@@ -53,6 +53,14 @@ public class User {
         this.confirmationToken = confirmationToken;
     }
 
+    public User(String firstName, String lastName, String phoneNumber, String email, String passwordHash) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phoneNumber = phoneNumber;
+        this.email = email;
+        this.passwordHash = passwordHash;
+    }
+
     public Long getId() {
         return id;
     }

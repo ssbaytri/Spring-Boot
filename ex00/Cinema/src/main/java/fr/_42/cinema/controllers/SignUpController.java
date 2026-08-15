@@ -4,7 +4,9 @@ import fr._42.cinema.models.Role;
 import fr._42.cinema.security.CinemaUserDetails;
 import fr._42.cinema.services.UserService;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -19,19 +21,23 @@ public class SignUpController {
     }
 
     @GetMapping("/signUp")
-    public String signUpPage(Authentication authentication) {
+    public String signUpPage(Authentication authentication, CsrfToken csrfToken,
+                             @RequestParam(required = false) String error, Model model) {
         String redirect = redirectIfAuthenticated(authentication);
-        return redirect != null ? redirect : "signUp";
+        if (redirect != null) {
+            return redirect;
+        }
+        model.addAttribute("_csrf", csrfToken);
+        model.addAttribute("signUpError", error != null);
+        return "signUp";
     }
 
     @PostMapping("/signUp")
-    public String signUp(
-            @RequestParam String firstName,
-            @RequestParam String lastName,
-            @RequestParam String phoneNumber,
-            @RequestParam String email,
-            @RequestParam String password
-    ) {
+    public String signUp(@RequestParam String firstName,
+                         @RequestParam String lastName,
+                         @RequestParam String phoneNumber,
+                         @RequestParam String email,
+                         @RequestParam String password) {
         if (isBlank(firstName) || isBlank(lastName) || isBlank(phoneNumber)
                 || isBlank(email) || isBlank(password)) {
             return "redirect:/signUp?error";
@@ -43,13 +49,15 @@ public class SignUpController {
 
     private String redirectIfAuthenticated(Authentication authentication) {
         if (authentication == null || !authentication.isAuthenticated()
-        || !(authentication.getPrincipal() instanceof CinemaUserDetails userDetails)) {
+                || !(authentication.getPrincipal() instanceof CinemaUserDetails userDetails)) {
             return null;
         }
-        return userDetails.getUser().getRole() == Role.ADMIN ? "redirect:/admin/panel/halls" : "redirect:/profile";
+        return userDetails.getUser().getRole() == Role.ADMIN
+                ? "redirect:/admin/panel/halls"
+                : "redirect:/profile";
     }
 
-    private boolean isBlank(String s ) {
+    private boolean isBlank(String s) {
         return s == null || s.trim().isEmpty();
     }
 }

@@ -7,6 +7,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
 
 public interface FileStorageService {
@@ -24,4 +25,8 @@ public interface FileStorageService {
     Optional<UploadedFile> findByStoredName(String storedName);
 
     Resource loadAsResource(String storedName) throws IOException;
+
+    List<UploadedFile> findAllByOwnerAndContext(User owner, UploadContext context);
+
+    Optional<UploadedFile> findLatestByOwnerAndContext(User owner, UploadContext context);
 }

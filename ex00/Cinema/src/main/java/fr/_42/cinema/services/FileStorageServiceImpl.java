@@ -17,6 +17,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -61,6 +62,16 @@ public class FileStorageServiceImpl implements FileStorageService {
     @Override
     public Optional<UploadedFile> findByStoredName(String storedName) {
         return uploadedFileRepository.findByStoredName(storedName);
+    }
+
+    @Override
+    public List<UploadedFile> findAllByOwnerAndContext(User owner, UploadContext context) {
+        return uploadedFileRepository.findAllByOwnerAndContext(owner, context);
+    }
+
+    @Override
+    public Optional<UploadedFile> findLatestByOwnerAndContext(User owner, UploadContext context) {
+        return uploadedFileRepository.findFirstByOwnerAndContextOrderByUploadedAtDesc(owner, context);
     }
 
     @Override

@@ -37,7 +37,7 @@ public class SecurityConfig {
                         .requestMatchers("/session/search").authenticated()
                         .requestMatchers("/films/*/chat", "/films/*/chat/messages").authenticated()
                         .requestMatchers("/signIn", "/signUp").permitAll()
-                        .requestMatchers("/css/**", "/js/**", "/images/**").permitAll()
+                        .requestMatchers("/css/**", "/js/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form

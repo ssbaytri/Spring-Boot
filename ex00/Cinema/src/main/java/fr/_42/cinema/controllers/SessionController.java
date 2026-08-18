@@ -8,6 +8,7 @@ import fr._42.cinema.services.FilmService;
 import fr._42.cinema.services.SessionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -33,7 +34,8 @@ public class SessionController {
     }
 
     @GetMapping
-    public String listSessions(Model model) {
+    public String listSessions(CsrfToken csrfToken, Model model) {
+        model.addAttribute("_csrf", csrfToken);
         model.addAttribute("sessions", sessionService.findAll());
         model.addAttribute("films", filmService.findAll());
         model.addAttribute("halls", hallService.findAll());

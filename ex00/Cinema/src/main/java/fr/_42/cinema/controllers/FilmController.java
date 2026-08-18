@@ -7,6 +7,7 @@ import fr._42.cinema.security.CinemaUserDetails;
 import fr._42.cinema.services.FileStorageService;
 import fr._42.cinema.services.FilmService;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -28,7 +29,8 @@ public class FilmController {
     }
 
     @GetMapping
-    public String listFilms(Model model) {
+    public String listFilms(CsrfToken csrfToken, Model model) {
+        model.addAttribute("_csrf", csrfToken);
         model.addAttribute("films", filmService.findAll());
         return "admin/films";
     }

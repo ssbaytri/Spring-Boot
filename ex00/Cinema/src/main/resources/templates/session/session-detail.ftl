@@ -23,23 +23,45 @@
                 <#if session.film.posterUrl?? && session.film.posterUrl != "">
                     <img src="${session.film.posterUrl}" alt="poster">
                 <#else>
-                    <div style="width: 220px; height: 330px; background: #eee; border-radius: 4px;"></div>
+                    <div class="poster-placeholder"></div>
                 </#if>
             </div>
 
             <div class="detail-info">
                 <h1>${session.film.title}</h1>
-                <p><strong>Release year:</strong> ${session.film.releaseYear}</p>
-                <p><strong>Age restriction:</strong> ${session.film.ageRestriction}+</p>
-                <p><strong>Description:</strong> ${session.film.description!"No description available."}</p>
+                <div class="film-meta">
+                    <span class="meta-badge">Release: ${session.film.releaseYear}</span>
+                    <span class="meta-badge">Age: ${session.film.ageRestriction}+</span>
+                </div>
+                <div class="film-description">
+                    <h3>Description</h3>
+                    <p>${session.film.description!"No description available."}</p>
+                </div>
             </div>
         </div>
 
         <div class="showtime-section">
-            <h2>🎫 Showtime</h2>
-            <p><strong>Date/Time:</strong> ${session.dateTime.format(formatter)}</p>
-            <p><strong>Hall:</strong> ${session.hall.serialNumber} (${session.hall.seatsNumber} seats)</p>
-            <p><strong>Ticket price:</strong> €${session.ticketPrice}</p>
+            <h2>🎫 Showtime Details</h2>
+            <div class="showtime-grid">
+                <div class="showtime-item">
+                    <span class="showtime-label">Date & Time</span>
+                    <span class="showtime-value">${session.dateTime.format(formatter)}</span>
+                </div>
+                <div class="showtime-item">
+                    <span class="showtime-label">Hall</span>
+                    <span class="showtime-value">${session.hall.serialNumber} (${session.hall.seatsNumber} seats)</span>
+                </div>
+                <div class="showtime-item">
+                    <span class="showtime-label">Ticket Price</span>
+                    <span class="showtime-value">€${session.ticketPrice}</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="action-section">
+            <a href="/films/${session.film.id}/chat" class="btn btn-chat">
+                💬 Join Film Chat
+            </a>
         </div>
     </div>
 </div>

@@ -18,7 +18,7 @@
     <div class="search-bar">
         <input type="text" id="filmSearch" placeholder="Search by film title..." autocomplete="off">
     </div>
-    <div id="results"></div>
+    <div id="results" class="sessions-grid"></div>
 </div>
 
 <script>
@@ -39,14 +39,15 @@
             if (posterSrc) {
                 card.append('<img src="' + posterSrc + '" alt="poster">');
             } else {
-                card.append('<div style="width: 100%; height: 240px; background: #eee;"></div>');
+                card.append('<div style="width: 100%; height: 200px; background: var(--bg);"></div>');
             }
 
             const content = $('<div class="session-card-content"></div>');
-            content.append('<p>' + session.dateTime + '</p>');
-            content.append($('<a></a>')
+            content.append('<h3>' + session.film.name + '</h3>');
+            content.append('<p class="meta"><span>' + session.dateTime + '</span></p>');
+            content.append($('<a class="btn"></a>')
                 .attr('href', '/sessions/' + session.id)
-                .text(session.film.name));
+                .text('View Details'));
 
             card.append(content);
             container.append(card);

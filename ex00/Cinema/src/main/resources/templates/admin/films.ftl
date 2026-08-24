@@ -68,7 +68,9 @@
                         <td>${film.description!''}</td>
                         <td>
                             <#if film.posterUrl?? && film.posterUrl != "">
-                                <img src="${film.posterUrl}" alt="Poster" width="50">
+                                <a href="${film.posterUrl}" target="_blank">
+                                    <img src="${film.posterUrl}" alt="Poster" width="50">
+                                </a>
                             </#if>
                         </td>
                     </tr>

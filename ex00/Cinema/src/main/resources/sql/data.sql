@@ -53,12 +53,3 @@ INSERT INTO session (film_id, hall_id, date_time, ticket_price)
 VALUES (2, 3, '2026-08-21 19:00:00', 600.00);
 INSERT INTO session (film_id, hall_id, date_time, ticket_price)
 VALUES (3, 1, '2026-08-22 20:00:00', 550.00);
-
--- ============================================================
--- Chat messages
--- ============================================================
-
-INSERT INTO chat_message (film_id, user_id, content, sent_at)
-VALUES (1, 2, 'Anyone else watching this again tonight?', '2026-08-19 10:15:00');
-INSERT INTO chat_message (film_id, user_id, content, sent_at)
-VALUES (1, 1, 'That ending never gets old.', '2026-08-19 10:20:00');

@@ -99,7 +99,7 @@ CREATE TABLE uploaded_file
     id            BIGSERIAL PRIMARY KEY,
     owner_id      BIGINT REFERENCES users (id) ON DELETE CASCADE,
     context       VARCHAR(20)  NOT NULL
-        CHECK (context IN ('AVATAR', 'CHAT', 'POSTER')),
+        CHECK (context IN ('AVATAR', 'POSTER')),
     original_name VARCHAR(255) NOT NULL,
     stored_name   VARCHAR(255) NOT NULL UNIQUE,
     size_bytes    BIGINT,

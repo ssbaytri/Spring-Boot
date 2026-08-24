@@ -18,9 +18,12 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.view.RedirectView;
 
 import java.io.IOException;
+import java.util.regex.Pattern;
 
 @RestController
 public class FileController {
+
+    private static final Pattern CHAT_RETURN_TO = Pattern.compile("^/films/\\d+/chat$");
 
     private final FileStorageService fileStorageService;
 
@@ -48,10 +51,15 @@ public class FileController {
     }
 
     @PostMapping("/images")
-    public RedirectView uploadAvatar(@RequestParam("avatar") MultipartFile avatar, Authentication authentication)
+    public RedirectView uploadAvatar(@RequestParam("avatar") MultipartFile avatar,
+                                     @RequestParam(value = "returnTo", required = false) String returnTo,
+                                     Authentication authentication)
             throws IOException {
         CinemaUserDetails userDetails = (CinemaUserDetails) authentication.getPrincipal();
         fileStorageService.store(avatar, UploadContext.AVATAR, userDetails.getUser());
-        return new RedirectView("/profile", true);
+        String target = returnTo != null && CHAT_RETURN_TO.matcher(returnTo).matches()
+                ? returnTo
+                : "/profile";
+        return new RedirectView(target, true);
     }
 }

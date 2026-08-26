@@ -73,6 +73,27 @@ a:hover {
     align-items: center;
 }
 
+.lang-selector {
+    display: flex;
+    gap: 8px;
+    font-size: 0.85rem;
+}
+
+.lang-selector a {
+    padding: 4px 10px;
+    border-radius: 4px;
+    background: var(--bg);
+    color: var(--text);
+    font-weight: 500;
+    transition: all var(--transition);
+}
+
+.lang-selector a:hover {
+    background: var(--accent);
+    color: #fff;
+    text-decoration: none;
+}
+
 .back-link {
     font-size: 0.9rem;
     color: var(--text-muted);

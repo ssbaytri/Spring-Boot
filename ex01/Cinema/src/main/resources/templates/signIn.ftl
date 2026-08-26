@@ -1,40 +1,46 @@
+<#import "/spring.ftl" as spring>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="${springMacroRequestContext.locale.language}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign In</title>
+    <title><@spring.message "signin.title"/></title>
     <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
 
 <div class="container">
-    <h1>🎬 Sign In</h1>
+    <div class="lang-selector">
+        <a href="?lang=en"><@spring.message "common.english"/></a>
+        <a href="?lang=es"><@spring.message "common.spanish"/></a>
+    </div>
+
+    <h1><@spring.message "signin.heading"/></h1>
 
     <#if loginError>
-        <div class="error-message">Incorrect email or password.</div>
+        <div class="error-message"><@spring.message "signin.error"/></div>
     </#if>
 
     <form method="POST" action="/signIn">
         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
 
-        <label>Email:
+        <label><@spring.message "signin.email"/>:
             <input type="email" name="email" required>
         </label>
 
-        <label>Password:
+        <label><@spring.message "signin.password"/>:
             <input type="password" name="password" required>
         </label>
 
         <label class="checkbox-label">
             <input type="checkbox" name="remember-me">
-            Remember me
+            <@spring.message "signin.rememberMe"/>
         </label>
 
-        <button type="submit">Sign In</button>
+        <button type="submit"><@spring.message "signin.submit"/></button>
     </form>
 
-    <p>Don't have an account? <a href="/signUp">Sign Up</a></p>
+    <p><@spring.message "signin.signupLink"/></p>
 </div>
 
 </body>

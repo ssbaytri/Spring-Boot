@@ -122,17 +122,6 @@ Same as ex00 - see [ex00 README](../ex00/README.md) for build/deploy instruction
 - [ ] Switch language after validation error → error messages translate
 - [ ] Input values preserved after validation failure
 
-### Error Message Keys (both languages)
-| Key | English | Spanish |
-|-----|---------|---------|
-| `errors.firstName.required` | First name is required | El nombre es obligatorio |
-| `errors.lastName.required` | Last name is required | El apellido es obligatorio |
-| `errors.phoneNumber.required` | Phone number is required | El teléfono es obligatorio |
-| `errors.incorrect.phone` | Phone must match +(code)digits... | El teléfono debe seguir el patrón... |
-| `errors.email.required` | Email is required | El correo es obligatorio |
-| `errors.incorrect.email` | Invalid email format | Formato de correo inválido |
-| `errors.password.required` | Password is required | La contraseña es obligatoria |
-| `errors.incorrect.password` | Password must be at least 8 chars... | La contraseña debe tener al menos 8... |
 
 ## Subject Requirements Mapping
 

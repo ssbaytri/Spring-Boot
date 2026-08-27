@@ -1,15 +1,18 @@
 package fr._42.cinema.controllers;
 
+import fr._42.cinema.dto.SignUpRequestDTO;
 import fr._42.cinema.models.Role;
 import fr._42.cinema.security.CinemaUserDetails;
 import fr._42.cinema.services.UserService;
+import jakarta.validation.Valid;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class SignUpController {
@@ -21,29 +24,26 @@ public class SignUpController {
     }
 
     @GetMapping("/signUp")
-    public String signUpPage(Authentication authentication, CsrfToken csrfToken,
-                             @RequestParam(required = false) String error, Model model) {
+    public String signUpPage(Authentication authentication, CsrfToken csrfToken, Model model) {
         String redirect = redirectIfAuthenticated(authentication);
         if (redirect != null) {
             return redirect;
         }
         model.addAttribute("_csrf", csrfToken);
-        model.addAttribute("signUpError", error != null);
+        if (!model.containsAttribute("signUpRequest")) {
+            model.addAttribute("signUpRequest", new SignUpRequestDTO());
+        }
         return "signUp";
     }
 
     @PostMapping("/signUp")
-    public String signUp(@RequestParam String firstName,
-                         @RequestParam String lastName,
-                         @RequestParam String phoneNumber,
-                         @RequestParam String email,
-                         @RequestParam String password) {
-        if (isBlank(firstName) || isBlank(lastName) || isBlank(phoneNumber)
-                || isBlank(email) || isBlank(password)) {
-            return "redirect:/signUp?error";
+    public String signUp(@Valid @ModelAttribute("signUpRequest") SignUpRequestDTO signUpRequest,
+                         BindingResult bindingResult, CsrfToken csrfToken, Model model) {
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("_csrf", csrfToken);
+            return "signUp";
         }
-
-        userService.signUp(firstName, lastName, phoneNumber, email, password);
+        userService.signUp(signUpRequest);
         return "redirect:/signIn";
     }
 
@@ -55,9 +55,5 @@ public class SignUpController {
         return userDetails.getUser().getRole() == Role.ADMIN
                 ? "redirect:/admin/panel/halls"
                 : "redirect:/profile";
-    }
-
-    private boolean isBlank(String s) {
-        return s == null || s.trim().isEmpty();
     }
 }

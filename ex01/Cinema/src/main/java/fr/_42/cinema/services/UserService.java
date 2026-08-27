@@ -1,5 +1,6 @@
 package fr._42.cinema.services;
 
+import fr._42.cinema.dto.SignUpRequestDTO;
 import fr._42.cinema.models.AuthenticationLog;
 import fr._42.cinema.models.User;
 import fr._42.cinema.repositories.AuthenticationLogRepository;
@@ -23,9 +24,15 @@ public class UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public User signUp(String firstName, String lastName, String phoneNumber, String email, String rawPassword) {
-        String hashedPassword = passwordEncoder.encode(rawPassword);
-        User user = new User(firstName, lastName, phoneNumber, email, hashedPassword);
+    public User signUp(SignUpRequestDTO signUpRequest) {
+        String hashedPassword = passwordEncoder.encode(signUpRequest.getPassword());
+        User user = new User(
+                signUpRequest.getFirstName(),
+                signUpRequest.getLastName(),
+                signUpRequest.getPhoneNumber(),
+                signUpRequest.getEmail(),
+                hashedPassword
+        );
         return userRepository.save(user);
     }
 

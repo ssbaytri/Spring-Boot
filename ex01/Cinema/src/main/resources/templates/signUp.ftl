@@ -17,31 +17,47 @@
 
     <h1><@spring.message "signup.heading"/></h1>
 
-    <#if signUpError>
-        <div class="error-message"><@spring.message "signup.error"/></div>
-    </#if>
-
     <form method="POST" action="/signUp">
         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
 
+        <@spring.bind "signUpRequest.firstName"/>
         <label><@spring.message "signup.firstName"/>:
-            <input type="text" name="firstName" required>
+            <input type="text" name="firstName" value="${spring.status.value!?default('')}" <#if spring.status.error??>class="error"</#if>>
+            <#if spring.status.error??>
+                <span class="field-error"><@spring.showErrors "" "field-error"/></span>
+            </#if>
         </label>
 
+        <@spring.bind "signUpRequest.lastName"/>
         <label><@spring.message "signup.lastName"/>:
-            <input type="text" name="lastName" required>
+            <input type="text" name="lastName" value="${spring.status.value!?default('')}" <#if spring.status.error??>class="error"</#if>>
+            <#if spring.status.error??>
+                <span class="field-error"><@spring.showErrors "" "field-error"/></span>
+            </#if>
         </label>
 
+        <@spring.bind "signUpRequest.phoneNumber"/>
         <label><@spring.message "signup.phone"/>:
-            <input type="text" name="phoneNumber" required>
+            <input type="text" name="phoneNumber" value="${spring.status.value!?default('')}" <#if spring.status.error??>class="error"</#if>>
+            <#if spring.status.error??>
+                <span class="field-error"><@spring.showErrors "" "field-error"/></span>
+            </#if>
         </label>
 
+        <@spring.bind "signUpRequest.email"/>
         <label><@spring.message "signup.email"/>:
-            <input type="email" name="email" required>
+            <input type="email" name="email" value="${spring.status.value!?default('')}" <#if spring.status.error??>class="error"</#if>>
+            <#if spring.status.error??>
+                <span class="field-error"><@spring.showErrors "" "field-error"/></span>
+            </#if>
         </label>
 
+        <@spring.bind "signUpRequest.password"/>
         <label><@spring.message "signup.password"/>:
-            <input type="password" name="password" required>
+            <input type="password" name="password" <#if spring.status.error??>class="error"</#if>>
+            <#if spring.status.error??>
+                <span class="field-error"><@spring.showErrors "" "field-error"/></span>
+            </#if>
         </label>
 
         <button type="submit"><@spring.message "signup.submit"/></button>

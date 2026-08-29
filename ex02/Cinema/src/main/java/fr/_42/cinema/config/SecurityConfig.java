@@ -3,6 +3,7 @@ package fr._42.cinema.config;
 import fr._42.cinema.repositories.AuthenticationLogRepository;
 import fr._42.cinema.security.CinemaUserDetailsService;
 import fr._42.cinema.security.RoleBasedAuthenticationSuccessHandler;
+import fr._42.cinema.security.CinemaAuthenticationFailureHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -28,6 +29,11 @@ public class SecurityConfig {
     }
 
     @Bean
+    public CinemaAuthenticationFailureHandler authenticationFailureHandler() {
+        return new CinemaAuthenticationFailureHandler();
+    }
+
+    @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http, CinemaUserDetailsService userDetailsService, AuthenticationLogRepository authenticationLogRepository)
             throws Exception {
         http
@@ -36,7 +42,7 @@ public class SecurityConfig {
                         .requestMatchers("/profile").authenticated()
                         .requestMatchers("/session/search").authenticated()
                         .requestMatchers("/films/*/chat", "/films/*/chat/messages").authenticated()
-                        .requestMatchers("/signIn", "/signUp").permitAll()
+                        .requestMatchers("/signIn", "/signUp", "/confirm/**").permitAll()
                         .requestMatchers("/css/**", "/js/**").permitAll()
                         .anyRequest().authenticated()
                 )
@@ -45,6 +51,7 @@ public class SecurityConfig {
                         .usernameParameter("email")
                         .passwordParameter("password")
                         .successHandler(authenticationSuccessHandler(authenticationLogRepository))
+                        .failureHandler(authenticationFailureHandler())
                         .permitAll()
                 )
                 .rememberMe(remember -> remember

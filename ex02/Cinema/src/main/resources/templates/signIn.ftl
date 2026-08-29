@@ -17,6 +17,22 @@
 
     <h1><@spring.message "signin.heading"/></h1>
 
+    <#if disabledError>
+        <div class="error-message"><@spring.message "signin.disabled"/></div>
+    </#if>
+
+    <#if registered>
+        <div class="alert-success"><@spring.message "signin.registered"/></div>
+    </#if>
+
+    <#if confirmed>
+        <div class="alert-success"><@spring.message "signin.confirmed"/></div>
+    </#if>
+
+    <#if invalidToken>
+        <div class="error-message"><@spring.message "signin.invalidToken"/></div>
+    </#if>
+
     <#if loginError>
         <div class="error-message"><@spring.message "signin.error"/></div>
     </#if>

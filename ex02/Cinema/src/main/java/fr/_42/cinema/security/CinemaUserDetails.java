@@ -1,6 +1,7 @@
 package fr._42.cinema.security;
 
 import fr._42.cinema.models.User;
+import fr._42.cinema.models.UserStatus;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -52,6 +53,6 @@ public class CinemaUserDetails implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return user.getStatus() == UserStatus.CONFIRMED;
     }
 }

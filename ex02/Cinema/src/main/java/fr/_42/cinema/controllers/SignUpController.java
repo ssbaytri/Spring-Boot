@@ -2,9 +2,12 @@ package fr._42.cinema.controllers;
 
 import fr._42.cinema.dto.SignUpRequestDTO;
 import fr._42.cinema.models.Role;
+import fr._42.cinema.models.User;
 import fr._42.cinema.security.CinemaUserDetails;
+import fr._42.cinema.services.EmailService;
 import fr._42.cinema.services.UserService;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.stereotype.Controller;
@@ -18,9 +21,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 public class SignUpController {
 
     private final UserService userService;
+    private final EmailService emailService;
 
-    public SignUpController(UserService userService) {
+    @Value("${app.base-url}")
+    private String baseUrl;
+
+    public SignUpController(UserService userService, EmailService emailService) {
         this.userService = userService;
+        this.emailService = emailService;
     }
 
     @GetMapping("/signUp")
@@ -43,8 +51,13 @@ public class SignUpController {
             model.addAttribute("_csrf", csrfToken);
             return "signUp";
         }
-        userService.signUp(signUpRequest);
-        return "redirect:/signIn";
+
+        User user = userService.signUp(signUpRequest);
+
+        String confirmationLink = baseUrl + "/confirm/" + user.getConfirmationToken();
+        emailService.sendConfirmationEmail(user.getEmail(), confirmationLink);
+
+        return "redirect:/signIn?registered";
     }
 
     private String redirectIfAuthenticated(Authentication authentication) {

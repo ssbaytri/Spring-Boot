@@ -3,12 +3,15 @@ package fr._42.cinema.services;
 import fr._42.cinema.dto.SignUpRequestDTO;
 import fr._42.cinema.models.AuthenticationLog;
 import fr._42.cinema.models.User;
+import fr._42.cinema.models.UserStatus;
 import fr._42.cinema.repositories.AuthenticationLogRepository;
 import fr._42.cinema.repositories.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -33,7 +36,20 @@ public class UserService {
                 signUpRequest.getEmail(),
                 hashedPassword
         );
+        user.setConfirmationToken(UUID.randomUUID());
         return userRepository.save(user);
+    }
+
+    public boolean confirm(UUID token) {
+        Optional<User> userOpt = userRepository.findByConfirmationToken(token);
+        if (userOpt.isEmpty()) {
+            return false;
+        }
+        User user = userOpt.get();
+        user.setStatus(UserStatus.CONFIRMED);
+        user.setConfirmationToken(null);
+        userRepository.save(user);
+        return true;
     }
 
     public List<AuthenticationLog> getAuthenticationLogs(User user) {

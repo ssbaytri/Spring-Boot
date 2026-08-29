@@ -120,28 +120,6 @@ spring.mail.properties.mail.smtp.ssl.trust=smtp.gmail.com
 // Remember-me, CSRF, role-based access from ex00
 ```
 
-### LocalizationConfig.java
-```java
-@Bean
-public MessageSource messageSource() {
-    ResourceBundleMessageSource ms = new ResourceBundleMessageSource();
-    ms.setBasename("messages/messages");  // Note: subfolder "messages/"
-    ms.setDefaultEncoding("UTF-8");
-    return ms;
-}
-```
-
-## Database Schema (schema.sql additions)
-
-```sql
--- users table additions
-status        VARCHAR(20)  NOT NULL DEFAULT 'NOT_CONFIRMED'
-    CHECK (status IN ('CONFIRMED', 'NOT_CONFIRMED')),
-confirmation_token UUID
-
--- Test users in data.sql have CONFIRMED status
-```
-
 ## Running the Application
 
 ### Prerequisites
@@ -158,18 +136,9 @@ cp target/cinema.war /opt/tomcat/webapps/
 /opt/tomcat/bin/startup.sh
 ```
 
-### Database Setup
-```bash
-psql -U postgres -c "CREATE DATABASE new_cinema;"
-psql -U postgres -c "CREATE USER cinema WITH PASSWORD 'cinema';"
-psql -U postgres -c "GRANT ALL PRIVILEGES ON DATABASE new_cinema TO cinema;"
-psql -U cinema -d new_cinema -f src/main/resources/sql/schema.sql
-psql -U cinema -d new_cinema -f src/main/resources/sql/data.sql
-```
-
 ### Access
 ```
-http://localhost:8080/cinema/
+http://localhost:8080/
 ```
 
 ## Testing Checklist
@@ -182,35 +151,10 @@ http://localhost:8080/cinema/
 - [ ] Use invalid/expired token → `/signIn?invalidToken` message
 - [ ] Admin user (from data.sql) → signs in directly (CONFIRMED by default)
 
-### Localization (from ex01)
-- [ ] `?lang=en` / `?lang=es` on signIn, signUp, profile
-- [ ] Validation errors translate (ex01)
-- [ ] New confirmation messages translate:
-  - `signin.disabled`
-  - `signin.registered`
-  - `signin.confirmed`
-  - `signin.invalidToken`
-
-### Security (from ex00/ex01)
-- [ ] Role-based redirects (ADMIN → halls, USER → profile)
-- [ ] CSRF protection on all forms
-- [ ] Remember-me works
-- [ ] Unauthorized access redirects to `/signIn`
-- [ ] WebSocket chat works for authenticated users
-
 ### Email Configuration
 - [ ] Gmail App Password configured in `application.properties`
 - [ ] `app.base-url` matches deployment URL
 - [ ] Email received with working `/confirm/{token}` link
-
-## Test Credentials (from data.sql)
-
-| Email | Password | Role | Status |
-|-------|----------|------|--------|
-| `admin@cinema.com` | `admin123` | ADMIN | CONFIRMED |
-| `alice@example.com` | `password` | USER | CONFIRMED |
-
-*New registrations start as `NOT_CONFIRMED` until email link clicked.*
 
 ## Subject Requirements Mapping
 

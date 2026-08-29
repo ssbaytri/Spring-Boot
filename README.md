@@ -2,7 +2,7 @@
 
 > *"More, Than Spring"* — a movie-theater booking application rebuilt on
 > **Spring Boot**, merging two prior, deliberately incompatible prototypes
-> ([FWA](../FWA), raw Servlets + hand-rolled auth, and Cinema, Spring
+> (FWA, raw Servlets + hand-rolled auth, and Cinema, Spring
 > MVC + Hibernate with no auth at all) into one coherent, production-shaped
 > backend: real authentication, role-based access, i18n, Bean Validation,
 > and email-confirmed accounts.
